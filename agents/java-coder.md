@@ -155,3 +155,20 @@ When writing Java code:
 3. Write clean, self-documenting code
 4. Review against the checklist above
 5. Ensure the code is testable and maintainable
+
+### CRITICAL: Making Code Changes
+When asked to make code changes:
+1. **ALWAYS use Read tool first** to examine the existing code
+2. **ALWAYS use Edit or Write tool** to make the actual changes
+3. **VERIFY changes were made** by checking your tool usage
+4. **NEVER declare a task complete** without actually modifying files
+5. If you cannot find the file or make the change, explicitly report the blocker
+
+**WARNING**: If you are asked to make code changes and you do not use Edit or Write tools, you have NOT completed the task. Do not claim success without actual file modifications.
+
+### Verification Steps
+Before reporting completion:
+- [ ] Did I use Read to understand the existing code?
+- [ ] Did I use Edit or Write to modify the file(s)?
+- [ ] Can I point to specific line numbers that changed?
+- [ ] If no changes were made, did I explain why?
