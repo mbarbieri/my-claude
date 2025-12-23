@@ -3,7 +3,7 @@ description: Create implementation plan from feature/requirement with PRD-style 
 argument-hint: <feature/requirement description or GitHub issue URL/number>
 ---
 
-# Plan: PRD-Informed Task Planning for TDD
+# Create Issues: PRD-Informed Task Planning for TDD
 
 Create structured implementation plan that bridges product thinking (PRD) with test-driven development.
 
@@ -16,6 +16,10 @@ Create structured implementation plan that bridges product thinking (PRD) with t
 - The code should speak for itself - TDD is the process, not the product
 
 Beads is available for task tracking. Use `mcp__beads__*` tools to manage issues (the user interacts via `bd` commands).
+
+## Plan File Restriction
+
+**NEVER create, read, or update plan.md files.** Claude Code's internal planning files are disabled for this project. Use other methods to track implementation progress (e.g., comments, todo lists, or external tools).
 
 ## Input
 
@@ -180,7 +184,7 @@ See <https://github.com/steveyegge/beads> for more information.
 
 ## Integration with Other Commands
 
-- **Before /plan**: Use `/spike` if you need technical exploration first
-- **After /plan**: Use `/red` to start TDD on first task
+- **Before /create-issues**: Use `/spike` if you need technical exploration first
+- **After /create-issues**: Use `/red` to start TDD on first task
 - **During work**: Use `bd update` to add notes/findings back to issues
 - **When stuck**: Check `bd show ISSUE-ID` to review acceptance criteria
