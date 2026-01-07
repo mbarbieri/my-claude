@@ -37,8 +37,8 @@
 
   Example:
 
-- Good: "Include apiTokenAuthDisabled in bulk dump even though it never changes - one request gets everything"
-- Bad: "Keep apiTokenAuthDisabled as a separate call since it can be cached forever"
+- Good: "Include featureEnabled in bulk dump even though it never changes - one request gets everything"
+- Bad: "Keep featureEnabled as a separate call since it can be cached forever"
 
 ### Cross-Instance Consistency in Distributed Systems
 
@@ -62,3 +62,23 @@
 
 - Good: "Let me spawn a researcher agent to check if customer settings are used for auth computation"
 - Bad: "Customer settings seem like feature flags, let's keep them as live calls"
+
+## Beads Workflow - Modified for This User
+
+  The standard beads workflow suggests:
+  ```bash
+  git status
+  git add <files>
+  bd sync --from-main
+  git commit -m "..."
+```
+  However, this user prefers to manage beads sync manually.
+
+  Modified checklist:
+  ```bash
+  git status              # Check what changed
+  git add <files>         # Stage code changes
+  git commit -m "..."     # Commit code changes
+  ```
+User will run bd sync manually when needed
+Do not run bd sync automatically - wait for user to request it.
