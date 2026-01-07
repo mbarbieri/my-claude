@@ -57,7 +57,7 @@ Learnings specific to this codebase, its patterns, or conventions.
 User preferences that apply across all projects.
 
 ### General Improvements (for any CLAUDE.md)
-Broadly applicable learnings about working with this user.
+Broadly applicable learnings about working with this user. These must be generalizable beyond the current task—if a learning only applies to this specific task, skip it entirely. Good general improvements describe patterns in how the user prefers to work, communicate, or make decisions that will apply to future unrelated tasks.
 
 ## Guidelines
 
@@ -66,4 +66,5 @@ Broadly applicable learnings about working with this user.
 - Keep each snippet self-contained and copy-paste ready
 - Focus on patterns, not one-off incidents
 - Prioritize high-impact learnings over minor details
+- **Skip learnings that only apply to the current task**—if it won't help in a completely different context, it's not worth documenting
 - If the session went smoothly with no significant corrections, say so briefly
