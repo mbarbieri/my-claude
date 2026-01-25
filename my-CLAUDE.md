@@ -18,10 +18,6 @@
 
   Code details belong in implementation sessions, not design sessions.
 
-### Prefer Existing Patterns Over New Designs
-
-  When designing extractions/migrations, default to copying existing API contracts rather than inventing new ones. If the codebase already has `/api/identity/context`, propose using the same endpoint in the new service.
-
 ### Keep Migration Plans Simple
 
   Don't over-engineer rollout strategies. If the team has existing mechanisms (like region-based deployment), use those instead of proposing new ones (percentage rollouts, shadow mode, contract tests).
@@ -62,6 +58,17 @@
 
 - Good: "Let me spawn a researcher agent to check if customer settings are used for auth computation"
 - Bad: "Customer settings seem like feature flags, let's keep them as live calls"
+
+## Bug Fixing Process
+
+  When fixing bugs, the user expects:
+  1. **Write a failing test FIRST** that reproduces the bug
+  2. **Only then** implement the fix
+  3. Verify the test passes
+
+  Example:
+  - Good: "Create a test verifying this behaviour and ONLY after fix it"
+  - Bad: Fix the bug first, then add tests afterward
 
 ## Beads Workflow - Modified for This User
 
