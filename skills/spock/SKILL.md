@@ -1,14 +1,16 @@
 ---
-name: spock-testing
+name: spock
 description: Use when writing or refactoring Spock tests in Java projects - enforces data-driven testing with where blocks, proper mock/stub placement, and descriptive test names following Spock best practices
 ---
 
 # Spock Testing
 
 ## Overview
+
 Write maintainable Spock tests using data-driven testing, proper block structure, and clear naming. **Core principle:** Similar tests with different inputs = one parameterized test with `where:` block.
 
 ## When to Use
+
 - Writing new Spock tests
 - Refactoring existing Spock tests
 - Reviewing Spock test code
@@ -21,6 +23,7 @@ Writing 3+ similar tests = You MUST use where: block
 ```
 
 **No exceptions:**
+
 - Not "I'll refactor later"
 - Not "Copy-paste is faster"
 - Not "These are slightly different"
@@ -31,6 +34,7 @@ Writing 3+ similar tests = You MUST use where: block
 ## Red Flags - STOP and Use where: Block
 
 You're about to violate the Iron Rule if:
+
 - "I'm writing my 3rd test with same structure"
 - "Just need to change the input value"
 - "Copy-paste-modify is fastest"
@@ -42,6 +46,7 @@ You're about to violate the Iron Rule if:
 ## Before/After Pattern
 
 ### ❌ BAD: Separate Tests
+
 ```groovy
 def "should calculate 20% discount for premium"() {
     when:
@@ -71,9 +76,11 @@ def "should calculate no discount for guest"() {
     result == BigDecimal.ZERO
 }
 ```
+
 **Problems:** 4 test methods, 20+ lines, duplicated structure, hard to see pattern
 
 ### ✅ GOOD: Data-Driven Test
+
 ```groovy
 def "should calculate #expectedDiscount discount for #customerType customer"() {
     expect:
@@ -87,11 +94,13 @@ def "should calculate #expectedDiscount discount for #customerType customer"() {
     CustomerType.GUEST   | new BigDecimal(100) | BigDecimal.ZERO
 }
 ```
+
 **Benefits:** 1 test method, 10 lines, pattern obvious, easy to add cases
 
 ## Quick Reference
 
 ### Spock Block Structure
+
 | Block | Purpose | Example |
 |-------|---------|---------|
 | `given:` | Setup, stubs | `repository.findById(1) >> Optional.of(user)` |
@@ -101,18 +110,23 @@ def "should calculate #expectedDiscount discount for #customerType customer"() {
 | `where:` | Data table for parameters | `a \| b \| sum` |
 
 ### Mock vs Stub
+
 - **Stub** → Return fake data → Goes in `given:` → Use `>>`
+
   ```groovy
   given:
   repository.findById(1) >> Optional.of(user)  // Stub
   ```
+
 - **Mock** → Verify interaction → Goes in `then:` → Use `*`
+
   ```groovy
   then:
   1 * emailService.sendWelcome(user)  // Mock verification
   ```
 
 ### where: Block Syntax
+
 ```groovy
 where:
 columnA | columnB | expected
@@ -121,6 +135,7 @@ value3  | value4  | result2
 ```
 
 Use `#variable` in test names to show which parameter is tested:
+
 ```groovy
 def "should validate #email as #validity"() {
     expect:
@@ -147,16 +162,19 @@ def "should validate #email as #validity"() {
 ## Testing Strategy
 
 ### Integration Tests
+
 - Test **only happy path** with typical example
 - Focus on external interfaces
 - Keep mocking minimal
 
 ### Unit Tests
+
 - Cover **edge cases, errors, boundaries**
 - Use `where:` blocks for variations
 - One behavior per test
 
 ### Validation Example
+
 ```groovy
 def "should reject invalid email: #reason"() {
     expect:
@@ -193,6 +211,7 @@ def "should accept valid email: #email"() {
 ## Red Flags Checklist
 
 Before writing a test, check:
+
 - [ ] Am I testing similar behavior with different inputs?
 - [ ] Does this look like my previous 2 tests?
 - [ ] Am I about to copy-paste-modify?
@@ -203,11 +222,13 @@ Before writing a test, check:
 ## Real-World Impact
 
 **Before data-driven testing:**
+
 - 47 test methods for validation logic
 - 800+ lines of test code
 - 3 hours to add new validation rule
 
 **After data-driven testing:**
+
 - 8 test methods (6x consolidation)
 - 200 lines of test code
 - 15 minutes to add new validation rule

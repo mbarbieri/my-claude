@@ -1,5 +1,5 @@
 ---
-name: java-development
+name: java
 description: Use when writing, modifying, or reviewing Java code - applies SOLID principles, clean code practices, minimal documentation, and pragmatic abstraction to create maintainable Java applications
 ---
 
@@ -12,12 +12,14 @@ Write clean, maintainable Java code following SOLID principles and pragmatic pra
 ## Core Principles
 
 ### Object-Oriented Design
+
 - Apply SOLID principles appropriately
 - Use encapsulation to hide implementation details
 - Design clear class responsibilities
 - **Favor composition over inheritance** for code reuse
 
 ### Pragmatic Abstraction
+
 - Only introduce abstractions when they provide clear value
 - Avoid premature generalization
 - **Don't create interfaces or abstract classes unless multiple implementations exist or polymorphism is needed**
@@ -32,11 +34,13 @@ Write clean, maintainable Java code following SOLID principles and pragmatic pra
 Private methods are implementation details. If they need documentation, refactor for clarity instead.
 
 **Javadoc on public APIs only when:**
+
 - Complex algorithm or business logic
 - Non-obvious behavior or side effects
 - Important constraints or assumptions
 
 **Don't document obvious methods:**
+
 ```java
 // ❌ BAD
 /**
@@ -49,6 +53,7 @@ public int getCustomerCount() { return customers.size(); }
 ```
 
 ### Constants and Magic Values
+
 - **Only extract constants if used in multiple places**
 - Don't create constants for single-use values - inline them with clear context
 - Use meaningful names that explain purpose, not just value
@@ -88,13 +93,16 @@ private static final String DEFAULT_FORMAT = "yyyy-MM-dd";
 ```
 
 ### Naming and Clarity
+
 - Prefer clear, descriptive names over comments
 - Variables and methods should be self-documenting
 - Avoid cryptic abbreviations
 - Write code that reads like prose
 
 ### Comments
+
 Keep comments minimal. Use them only for:
+
 - Complex algorithms or business logic
 - Non-obvious decisions or workarounds
 - Important constraints or assumptions
@@ -123,7 +131,7 @@ Keep comments minimal. Use them only for:
 | "Future maintainers will thank me" | Future maintainers want clear code, not documented unclear code. |
 | "This getter has side effects so it needs docs" | If a getter has side effects, it shouldn't be named 'get'. Rename it. |
 
-## Red Flags - Review Your Code If You:
+## Red Flags - Review Your Code If You
 
 - Added Javadoc comment to any private method
 - Documented a simple getter/setter
@@ -135,6 +143,7 @@ Keep comments minimal. Use them only for:
 ## Code Review Checklist
 
 Before finalizing Java code:
+
 - [ ] No Javadoc on private methods/constructors
 - [ ] Public method Javadoc adds real value (not obvious)
 - [ ] Classes have single, clear responsibilities
@@ -148,6 +157,7 @@ Before finalizing Java code:
 ## Examples
 
 ### Composition Over Inheritance
+
 ```java
 // ✅ GOOD
 public class EmailNotifier {
@@ -167,6 +177,7 @@ public class EmailNotifier {
 ```
 
 ### Self-Documenting Code
+
 ```java
 // ✅ GOOD - clear without comments
 public boolean isEligibleForDiscount(Customer customer) {

@@ -1,5 +1,5 @@
 ---
-name: using-jira-tool
+name: jira-tool
 description: Use when user provides Jira issue URLs or mentions Jira tickets - fetches issue details and comments from Jira Cloud using local jira tool, outputs AI-optimized markdown for context gathering
 ---
 
