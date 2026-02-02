@@ -72,20 +72,30 @@
 
 ## Beads Workflow - Modified for This User
 
-  The standard beads workflow suggests:
-  ```bash
-  git status
-  git add <files>
-  bd sync --from-main
-  git commit -m "..."
-```
-  However, this user prefers to manage beads sync manually.
+The standard beads workflow suggests:
 
-  Modified checklist:
-  ```bash
-  git status              # Check what changed
-  git add <files>         # Stage code changes
-  git commit -m "..."     # Commit code changes
-  ```
+```bash
+git status
+git add <files>
+bd sync --from-main
+git commit -m "..."
+```
+
+However, this user prefers to manage beads sync manually.
+
+Modified checklist:
+
+```bash
+git status              # Check what changed
+git add <files>         # Stage code changes
+git commit -m "..."     # Commit code changes
+```
+
 User will run bd sync manually when needed
 Do not run bd sync automatically - wait for user to request it.
+
+## API Design Philosophy
+
+### Prefer extending APIs over forcing caller conversions
+
+When an API method requires type A but callers naturally have type B, add an overload accepting type B rather than requiring callers to convert. The API should accommodate its callers, not the reverse.
