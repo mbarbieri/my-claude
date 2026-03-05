@@ -62,40 +62,29 @@
 ## Bug Fixing Process
 
   When fixing bugs, the user expects:
+
   1. **Write a failing test FIRST** that reproduces the bug
   2. **Only then** implement the fix
   3. Verify the test passes
 
   Example:
-  - Good: "Create a test verifying this behaviour and ONLY after fix it"
-  - Bad: Fix the bug first, then add tests afterward
 
-## Beads Workflow - Modified for This User
-
-The standard beads workflow suggests:
-
-```bash
-git status
-git add <files>
-bd sync --from-main
-git commit -m "..."
-```
-
-However, this user prefers to manage beads sync manually.
-
-Modified checklist:
-
-```bash
-git status              # Check what changed
-git add <files>         # Stage code changes
-git commit -m "..."     # Commit code changes
-```
-
-User will run bd sync manually when needed
-Do not run bd sync automatically - wait for user to request it.
+- Good: "Create a test verifying this behaviour and ONLY after fix it"
+- Bad: Fix the bug first, then add tests afterward
 
 ## API Design Philosophy
 
 ### Prefer extending APIs over forcing caller conversions
 
 When an API method requires type A but callers naturally have type B, add an overload accepting type B rather than requiring callers to convert. The API should accommodate its callers, not the reverse.
+
+## Plan Mode
+
+- Make the plan extremely concise. Sacrifice grammar for the sake of concision.
+- At the end of each plan, give me a list of unresolved questions to answer, if any.
+
+## Tracer Bullets
+
+When building features, build a tiny, end-to-end slice of the feature first, seek feedback, then expand out from there.
+
+Tracer bullets comes from the Pragmatic Programmer. When building systems, you want to write code that gets you feedback as quickly as possible. Tracer bullets are small slices of functionality that go through all layers of the system, allowing you to test and validate your approach early. This helps in identifying potential issues and ensures that the overall architecture is sound before investing significant time in development.
