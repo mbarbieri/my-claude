@@ -3,9 +3,13 @@ description: Execute TDD Red Phase - write ONE failing test
 argument-hint: [optional additional info]
 ---
 
-RED PHASE! Apply the below to the info given by user input here:
+**User arguments:**
 
-$ARGUMENTS
+Red: $ARGUMENTS
+
+**End of user arguments**
+
+RED PHASE! Apply the below to the user input above.
 
 ## General Guidelines
 

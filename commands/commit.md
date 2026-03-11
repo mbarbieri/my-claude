@@ -19,7 +19,11 @@ Beads is available for task tracking. Use `mcp__beads__*` tools to manage issues
 
 Create a git commit following project standards
 
-Include any of the following info if specified: $ARGUMENTS
+**User arguments:**
+
+Commit: $ARGUMENTS
+
+**End of user arguments**
 
 ## Commit Message Rules
 
@@ -30,12 +34,7 @@ Follows [Conventional Commits](https://www.conventionalcommits.org/) standard.
    - Use `owner/repo#123` for cross-repo issues
    - Common types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
 
-2. **AI Credits**: **NEVER include AI credits in commit messages**
-   - No "Generated with Claude Code"
-   - No "Co-Authored-By: Claude" or "Co-Authored-By: Happy"
-   - Focus on the actual changes made, not conversation history
-
-3. **Content**: Write clear, concise commit messages describing what changed and why
+2. **Content**: Write clear, concise commit messages describing what changed and why
 
 ## Process
 

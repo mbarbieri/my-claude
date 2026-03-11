@@ -3,9 +3,13 @@ description: Execute complete TDD cycle - Red, Green, and Refactor phases in seq
 argument-hint: <feature or requirement description>
 ---
 
-RED+GREEN+REFACTOR (one cycle) PHASE! Apply the below to the info given by user input here:
+**User arguments:**
 
-$ARGUMENTS
+Cycle: $ARGUMENTS
+
+**End of user arguments**
+
+RED+GREEN+REFACTOR (one cycle) PHASE! Apply the below to the user input above.
 
 ## General Guidelines
 
@@ -14,6 +18,8 @@ $ARGUMENTS
 - **Never explicitly mention TDD** in code, comments, commits, PRs, or issues
 - Write natural, descriptive code without meta-commentary about the development process
 - The code should speak for itself - TDD is the process, not the product
+
+Beads is available for task tracking. Use `mcp__beads__*` tools to manage issues (the user interacts via `bd` commands).
 
 ## Plan File Restriction
 

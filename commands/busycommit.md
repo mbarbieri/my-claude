@@ -19,7 +19,11 @@ Beads is available for task tracking. Use `mcp__beads__*` tools to manage issues
 
 Create multiple atomic git commits, committing the smallest possible logical unit at a time
 
-Include any of the following info if specified: $ARGUMENTS
+**User arguments:**
+
+Busycommit: $ARGUMENTS
+
+**End of user arguments**
 
 ## Commit Message Rules
 

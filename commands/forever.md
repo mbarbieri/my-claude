@@ -13,7 +13,11 @@ argument-hint: [optional: initial task or focus area]
 
 Beads is available for task tracking. Use `mcp__beads__*` tools to manage issues (the user interacts via `bd` commands).
 
-# Forever Mode: $ARGUMENTS
+**User arguments:**
+
+Forever: $ARGUMENTS
+
+**End of user arguments**
 
 Run autonomously, finding and completing work until interrupted or truly stuck.
 

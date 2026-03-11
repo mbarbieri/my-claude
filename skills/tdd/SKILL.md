@@ -1,15 +1,9 @@
 ---
-description: Execute TDD Refactor Phase - improve code structure while keeping tests green
-argument-hint: <refactoring description>
+name: tdd
+description: Remind agent about TDD approach and continue conversation
 ---
 
-**User arguments:**
-
-Refactor: $ARGUMENTS
-
-**End of user arguments**
-
-Apply this document (specifically the Refactor phase) to the user input above.
+# TDD Reminder
 
 ## General Guidelines
 
@@ -25,11 +19,6 @@ Beads is available for task tracking. Use `mcp__beads__*` tools to manage issues
 
 **NEVER create, read, or update plan.md files.** Claude Code's internal planning files are disabled for this project. Use other methods to track implementation progress (e.g., comments, todo lists, or external tools).
 
-(If there was no info above, fallback to:
-
-1. Context of the conversation, if there's an immediate thing
-2. `bd ready` to see what to work on next and start from there)
-
 ## TDD Fundamentals
 
 ### The TDD Cycle
@@ -40,12 +29,9 @@ The foundation of TDD is the Red-Green-Refactor cycle:
 
    - The test must fail for the RIGHT reason (not syntax/import errors)
    - Only one test at a time - this is critical for TDD discipline
-     - Exception: For browser-level tests or expensive setup (e.g., Storybook `*.stories.tsx`), group multiple assertions within a single test block to avoid redundant setup - but only when adding assertions to an existing interaction flow. If new user interactions are required, still create a new test. Split files by category if they exceed ~1000 lines.
    - **Adding a single test to a test file is ALWAYS allowed** - no prior test output needed
    - Starting TDD for a new feature is always valid, even if test output shows unrelated work
-   - For DOM-based tests, use `data-testid` attributes to select elements rather than CSS classes, tag names, or text content
-   - Avoid hard-coded timeouts both in form of sleep() or timeout: 5000 etc; use proper async patterns (`waitFor`, `findBy*`, event-based sync) instead and rely on global test configs for timeout settings
-
+   
 2. **Green Phase**: Write MINIMAL code to make the test pass
 
    - Implement only what's needed for the current failing test
@@ -102,26 +88,12 @@ This phase is **not part of the regular TDD workflow** and must only be applied 
 - Adding types, interfaces, or a constant in order to replace magic values is perfectly fine during refactoring.
 - Provide the agent with helpful directions so that they do not get stuck when blocking them.
 
-## Code Complexity Signals
+## Continue Conversation
 
-Look for these refactoring opportunities:
+**User arguments:**
 
-- [ ] Nesting > 3 levels deep
-- [ ] Functions > 20 lines
-- [ ] Duplicate code blocks
-- [ ] Abstractions with single implementation
-- [ ] "Just in case" parameters or config
-- [ ] Magic values without names
-- [ ] Dead/unused code
+TDD: $ARGUMENTS
 
-### Watch for Brittle Tests
+**End of user arguments**
 
-When refactoring implementation, watch for **Peeping Tom** tests that:
-
-- Test private methods or internal state directly
-- Assert on implementation details rather than behavior
-- Break on any refactoring even when behavior is preserved
-
-If tests fail after a pure refactoring (no behavior change), consider whether the tests are testing implementation rather than behavior.
-
-1. **Consistency check** - Look for inconsistent patterns, naming conventions, or structure across the codebase
+Please continue with the user input above, applying TDD approach.

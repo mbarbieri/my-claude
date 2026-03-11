@@ -3,9 +3,13 @@ description: Execute TDD Green Phase - write minimal implementation to pass the 
 argument-hint: <implementation description>
 ---
 
-GREEN PHASE! Apply the below to the info given by user input here:
+**User arguments:**
 
-$ARGUMENTS
+Green: $ARGUMENTS
+
+**End of user arguments**
+
+GREEN PHASE! Apply the below to the user input above.
 
 ## General Guidelines
 
@@ -38,7 +42,7 @@ The foundation of TDD is the Red-Green-Refactor cycle:
    - Only one test at a time - this is critical for TDD discipline
    - **Adding a single test to a test file is ALWAYS allowed** - no prior test output needed
    - Starting TDD for a new feature is always valid, even if test output shows unrelated work
-
+   
 2. **Green Phase**: Write MINIMAL code to make the test pass
 
    - Implement only what's needed for the current failing test

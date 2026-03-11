@@ -13,7 +13,11 @@ argument-hint: [file, function, or area to simplify]
 
 Beads is available for task tracking. Use `mcp__beads__*` tools to manage issues (the user interacts via `bd` commands).
 
-# Simplify: $ARGUMENTS
+**User arguments:**
+
+Simplify: $ARGUMENTS
+
+**End of user arguments**
 
 (If there was no info above, fallback to the context of the conversation)
 

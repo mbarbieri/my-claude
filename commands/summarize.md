@@ -19,7 +19,11 @@ Beads is available for task tracking. Use `mcp__beads__*` tools to manage issues
 
 Create a concise summary of the current conversation suitable for transferring context to a new conversation.
 
-Additional info: $ARGUMENTS
+**User arguments:**
+
+Summarize: $ARGUMENTS
+
+**End of user arguments**
 
 ## Summary Structure
 
