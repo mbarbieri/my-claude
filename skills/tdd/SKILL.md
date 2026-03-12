@@ -1,6 +1,6 @@
 ---
 name: tdd
-description: Remind agent about TDD approach and continue conversation
+description: Enforce TDD discipline (red-green-refactor, one test at a time, minimal implementation) when writing or modifying code. Use this skill whenever the user asks to implement a feature, add a class or method, fix a bug, refactor code, or add test coverage — even if they don't mention TDD or testing explicitly. Any task that involves writing production code or tests should go through this skill. Do NOT use for code review, CI/CD setup, testing questions, infrastructure, or documentation tasks.
 ---
 
 # TDD Reminder
