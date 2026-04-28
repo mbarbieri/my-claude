@@ -88,3 +88,17 @@ When an API method requires type A but callers naturally have type B, add an ove
 When building features, build a tiny, end-to-end slice of the feature first, seek feedback, then expand out from there.
 
 Tracer bullets comes from the Pragmatic Programmer. When building systems, you want to write code that gets you feedback as quickly as possible. Tracer bullets are small slices of functionality that go through all layers of the system, allowing you to test and validate your approach early. This helps in identifying potential issues and ensures that the overall architecture is sound before investing significant time in development.
+
+## Pure Computation vs Side Effects
+
+  Separate pure computation from side effects. Methods that compute/transform data should never persist or call services. Methods that persist should not compute — they orchestrate: call pure methods, then save the
+  results.
+
+- Pure methods take inputs, return outputs, touch nothing external → easy to test
+- Orchestrator methods call services, call pure methods, persist results → tested with mocks
+- If a method both computes AND saves, split it
+
+  Example:
+
+- Bad: `processOrder(orderId)` that calculates the discount, applies tax, AND saves to DB
+- Good: `calculateTotal(items, discount, taxRate)` returns the total (pure), caller persists
