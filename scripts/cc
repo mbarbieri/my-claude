@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Start tmux session if not already inside one
-if [ -z "${TMUX:-}" ]; then
-  exec tmux new-session "$0" "$@"
-fi
-
 # Get current branch or worktree name
 branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "detached")
 
@@ -13,5 +8,6 @@ branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "detached")
 sanitized=$(echo "$branch" | sed 's/[^a-zA-Z0-9]/-/g; s/-\{2,\}/-/g; s/^-//; s/-$//')
 
 export CLAUDE_CODE_TASK_LIST_ID="$sanitized"
+export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=true
 
 exec claude "$@"
