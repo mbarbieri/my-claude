@@ -120,6 +120,6 @@ Use TaskList to review the created tasks.
 ## Integration with Other Commands
 
 - **Before /create-tasks**: Use `/spike` if you need technical exploration first
-- **After /create-tasks**: Use `/red` to start TDD on first task
+- **After**: Use `/implement red <first task>` to start on the first task
 - **During work**: Use TaskUpdate to add notes/findings back to tasks
 - **When stuck**: Use TaskGet to review acceptance criteria
