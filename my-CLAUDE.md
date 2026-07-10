@@ -1,104 +1,61 @@
-# Global Claude instructions
+## Commits and PRs
 
-## Brainstorming Sessions
+- Omit attribution/co-author lines in commits and PRs.
+- After implementing a fix: run tests, commit, push, open the PR, then assess and respond to Copilot review comments.
 
-### Stay High-Level Until Implementation
+## Brainstorming / Design Sessions
 
-  During brainstorming/design sessions, avoid code-level details (interfaces, method signatures, class structures). Focus on:
-
-- Architecture decisions
-- Component responsibilities
-- Data flow
-- Migration strategy
-
-  Example:
+**Stay high-level.** Focus on architecture decisions, component responsibilities, data flow, migration strategy. No code-level details (interfaces, signatures, class structures) — those belong in implementation sessions.
 
 - Good: "Auth client provides circuit breaker, retry, caching"
 - Bad: `public interface AuthClient { AuthResult authenticate(HttpHeaders headers); ... }`
 
-  Code details belong in implementation sessions, not design sessions.
+**Keep migration plans simple.** Reuse existing mechanisms (e.g. region-based deployment) rather than inventing new rollout strategies (percentage rollouts, shadow mode, contract tests).
 
-### Keep Migration Plans Simple
+**Prefer complete decoupling over optimization.** Include all data in a single source even if some rarely changes — one request gets everything. Don't keep rarely-changing data as a separate live call just because it's cacheable.
 
-  Don't over-engineer rollout strategies. If the team has existing mechanisms (like region-based deployment), use those instead of proposing new ones (percentage rollouts, shadow mode, contract tests).
-
-  Example:
-
-- Good: "Deploy to low-risk regions first, then roll out to others"
-- Bad: "Phase 3a: Enable for 10% of customers, Phase 3b: Shadow mode comparison..."
-
-### Prefer Complete Decoupling Over Optimization
-
-  When designing service decoupling, prefer including all data in a single source even if some data rarely changes. Complete decoupling is more valuable than minor optimizations.
-
-  Example:
-
-- Good: "Include featureEnabled in bulk dump even though it never changes - one request gets everything"
-- Bad: "Keep featureEnabled as a separate call since it can be cached forever"
-
-### Cross-Instance Consistency in Distributed Systems
-
-  When designing caching strategies for services with multiple instances, always consider:
-
-- What happens when one instance has updated data and another doesn't?
-- How will this affect user sessions that hit different instances?
-- Is there existing infrastructure (Redis pub/sub, etc.) for cache coordination?
+**Consider cross-instance consistency** when caching in multi-instance services: what if one instance has stale data? How does it affect sessions hitting different instances? Is there existing infra (Redis pub/sub) for cache coordination?
 
 ## Research Before Design Decisions
 
-### Verify Assumptions About Data Dependencies
+Before excluding data from a cache or keeping it as a live call, research how it's actually used: pass-through only, on the hot path, or security-critical? Spawn a researcher agent to verify rather than assuming.
 
-  Before deciding to exclude data from a cache or keep it as a live call, research how that data is actually used:
-
-- Is it pass-through only (returned in response but not used for computation)?
-- Is it on the hot path (used for every request)?
-- Is it security-critical?
-
-  Example:
-
-- Good: "Let me spawn a researcher agent to check if customer settings are used for auth computation"
-- Bad: "Customer settings seem like feature flags, let's keep them as live calls"
+- State assumptions explicitly and ask the user to confirm premises before building findings on them.
 
 ## Bug Fixing Process
 
-  When fixing bugs, the user expects:
-
-  1. **Write a failing test FIRST** that reproduces the bug
-  2. **Only then** implement the fix
-  3. Verify the test passes
-
-  Example:
-
-- Good: "Create a test verifying this behaviour and ONLY after fix it"
-- Bad: Fix the bug first, then add tests afterward
+- Use TDD (write failing tests first) for bug fixes and new features; simplify/parameterize tests (e.g., Spock parameterization) before committing
+- Run the tests and report the exact exit code. If they can't run locally (e.g. Docker TestMain), say so explicitly and validate with go vet + LSP instead.
 
 ## API Design Philosophy
 
-### Prefer extending APIs over forcing caller conversions
+**Extend APIs rather than force caller conversions.** If a method needs type A but callers have type B, add a type-B overload. The API accommodates callers, not the reverse.
 
-When an API method requires type A but callers naturally have type B, add an overload accepting type B rather than requiring callers to convert. The API should accommodate its callers, not the reverse.
+**No boolean flag parameters on public methods** — intent is invisible at the call site. Use explicitly-named methods (`saveAndIssueActivationToken(user)`, not `save(user, true)`). A boolean on a private helper is fine. Splitting variants often lets the shared method get purer.
+
+## Code Comments
+
+Don't restate what the code does — make it self-explanatory (good names, small methods). Comment only for a non-obvious *why*, contract, or cross-component coupling. Public-interface javadoc is fine for a non-obvious contract, trimmed to just that.
 
 ## Plan Mode
 
-- Make the plan extremely concise. Sacrifice grammar for the sake of concision.
-- At the end of each plan, give me a list of unresolved questions to answer, if any.
+- Make plans extremely concise. Sacrifice grammar for concision.
+- End each plan with a list of unresolved questions, if any.
 
 ## Tracer Bullets
 
-When building features, build a tiny, end-to-end slice of the feature first, seek feedback, then expand out from there.
+Build a tiny, end-to-end slice through all layers first, seek feedback, then expand. Gets you validation of the architecture early, before investing significant time. (From *The Pragmatic Programmer*.)
 
-Tracer bullets comes from the Pragmatic Programmer. When building systems, you want to write code that gets you feedback as quickly as possible. Tracer bullets are small slices of functionality that go through all layers of the system, allowing you to test and validate your approach early. This helps in identifying potential issues and ensures that the overall architecture is sound before investing significant time in development.
+## Writing Style
+
+- Never use em-dashes (— or --). Use a comma, colon, parentheses, or restructure the sentence instead.
 
 ## Pure Computation vs Side Effects
 
-  Separate pure computation from side effects. Methods that compute/transform data should never persist or call services. Methods that persist should not compute — they orchestrate: call pure methods, then save the
-  results.
+Separate pure computation from side effects:
 
-- Pure methods take inputs, return outputs, touch nothing external → easy to test
-- Orchestrator methods call services, call pure methods, persist results → tested with mocks
-- If a method both computes AND saves, split it
+- Pure methods take inputs, return outputs, touch nothing external → easy to test.
+- Orchestrator methods call services, call pure methods, persist results → tested with mocks.
+- If a method both computes AND saves, split it.
 
-  Example:
-
-- Bad: `processOrder(orderId)` that calculates the discount, applies tax, AND saves to DB
-- Good: `calculateTotal(items, discount, taxRate)` returns the total (pure), caller persists
+Example: instead of `processOrder(orderId)` that calculates discount, applies tax, AND saves — use `calculateTotal(items, discount, taxRate)` (pure) and let the caller persist.
