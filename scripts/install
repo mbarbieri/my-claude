@@ -1,0 +1,130 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CLAUDE_DIR="${CLAUDE_DIR:-$HOME/.claude}"
+CATEGORIES=(agents commands skills)
+
+collect_items() {
+  local cat="$1"
+  local src="$REPO_ROOT/$cat"
+  [[ -d "$src" ]] || return 0
+  for entry in "$src"/*; do
+    [[ -e "$entry" ]] || continue
+    local name
+    name="$(basename "$entry")"
+    [[ "$name" == .* ]] && continue
+    echo "$cat/$name"
+  done
+}
+
+ITEMS=()
+for cat in "${CATEGORIES[@]}"; do
+  while IFS= read -r line; do ITEMS+=("$line"); done < <(collect_items "$cat")
+done
+
+if (( ${#ITEMS[@]} == 0 )); then
+  echo "No installable items found under $REPO_ROOT/{${CATEGORIES[*]}}"
+  exit 1
+fi
+
+if command -v gum >/dev/null 2>&1; then
+  SELECTED="$(printf '%s\n' "${ITEMS[@]}" | gum choose --no-limit \
+    --header "Select components to install (Space toggles, Enter confirms)")"
+elif command -v fzf >/dev/null 2>&1; then
+  SELECTED="$(printf '%s\n' "${ITEMS[@]}" | fzf --multi \
+    --header "TAB to toggle, Enter to confirm, Esc to cancel")"
+else
+  echo "Available components:"
+  i=1
+  for item in "${ITEMS[@]}"; do
+    printf "  %2d) %s\n" "$i" "$item"
+    i=$((i+1))
+  done
+  echo
+  read -r -p "Enter numbers to install (space-separated, 'all', or empty to cancel): " input
+  case "$input" in
+    "") SELECTED="" ;;
+    all|ALL) SELECTED="$(printf '%s\n' "${ITEMS[@]}")" ;;
+    *)
+      SELECTED=""
+      for n in $input; do
+        idx=$((n-1))
+        if (( idx >= 0 && idx < ${#ITEMS[@]} )); then
+          SELECTED+="${ITEMS[$idx]}"$'\n'
+        else
+          echo "Ignoring invalid index: $n" >&2
+        fi
+      done
+      SELECTED="${SELECTED%$'\n'}"
+      ;;
+  esac
+fi
+
+if [[ -z "${SELECTED:-}" ]]; then
+  echo "Nothing selected. Aborting."
+  exit 0
+fi
+
+# Categories whose top-level dir under ~/.claude is currently a symlink and
+# would have to be replaced with a real directory.
+CONVERTS=()
+for cat in "${CATEGORIES[@]}"; do
+  target="$CLAUDE_DIR/$cat"
+  if [[ -L "$target" ]]; then
+    used=0
+    while IFS= read -r rel; do
+      [[ "${rel%%/*}" == "$cat" ]] && used=1 && break
+    done <<< "$SELECTED"
+    (( used )) && CONVERTS+=("$cat")
+  fi
+done
+
+echo
+echo "Plan:"
+while IFS= read -r rel; do
+  echo "  link  $CLAUDE_DIR/$rel  ->  $REPO_ROOT/$rel"
+done <<< "$SELECTED"
+
+if (( ${#CONVERTS[@]} > 0 )); then
+  echo
+  echo "Note: the following are currently directory-level symlinks and will be"
+  echo "replaced with real directories so per-item symlinks can live inside:"
+  for cat in "${CONVERTS[@]}"; do
+    echo "  $CLAUDE_DIR/$cat  (was -> $(readlink "$CLAUDE_DIR/$cat"))"
+  done
+fi
+
+echo
+read -r -p "Proceed? [y/N] " ans
+case "$ans" in
+  y|Y|yes|YES) ;;
+  *) echo "Aborted."; exit 0 ;;
+esac
+
+for cat in "${CONVERTS[@]}"; do
+  rm "$CLAUDE_DIR/$cat"
+  mkdir -p "$CLAUDE_DIR/$cat"
+done
+
+for cat in "${CATEGORIES[@]}"; do
+  mkdir -p "$CLAUDE_DIR/$cat"
+done
+
+while IFS= read -r rel; do
+  src="$REPO_ROOT/$rel"
+  dest="$CLAUDE_DIR/$rel"
+  if [[ -L "$dest" && "$(readlink "$dest")" == "$src" ]]; then
+    echo "=  $dest  (already linked)"
+    continue
+  fi
+  if [[ -e "$dest" || -L "$dest" ]]; then
+    echo "!  $dest exists, replacing"
+    rm -rf "$dest"
+  fi
+  ln -s "$src" "$dest"
+  echo "+  $dest  ->  $src"
+done <<< "$SELECTED"
+
+echo
+echo "Done."
